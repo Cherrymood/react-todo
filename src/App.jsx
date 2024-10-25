@@ -1,35 +1,44 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import PropTypes from "prop-types";
 
-function App() {
-  const [count, setCount] = useState(0)
+const todoList = [
+  { id: 1, title: "Add new task" },
+  { id: 2, title: "Edit" },
+  { id: 3, title: "Task done" },
+];
 
+Heading.propTypes = {
+  children: PropTypes.node.isRequired, // Validate children
+};
+
+List.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+
+export default function App() {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div>
+      <Heading>Todo List</Heading>
+      <UnorderedList />
+    </div>
+  );
 }
 
-export default App
+function Heading({ children }) {
+  return <h1>{children}</h1>;
+}
+
+function UnorderedList() {
+  return (
+    <ul>
+      {todoList.map((task) => (
+        <List key={task.id}>
+          Id: {task.id}, Task: {task.title}
+        </List>
+      ))}
+    </ul>
+  );
+}
+
+function List({ children }) {
+  return <li>{children}</li>;
+}
