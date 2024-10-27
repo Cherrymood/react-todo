@@ -6,24 +6,24 @@ const todoList = [
   { id: 3, title: "Task done" },
 ];
 
-Heading.propTypes = {
+HeadingH1.propTypes = {
   children: PropTypes.node.isRequired, // Validate children
 };
 
-List.propTypes = {
+ListItem.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
 export default function App() {
   return (
     <div>
-      <Heading>Todo List</Heading>
+      <HeadingH1>Todo List</HeadingH1>
       <UnorderedList />
     </div>
   );
 }
 
-function Heading({ children }) {
+function HeadingH1({ children }) {
   return <h1>{children}</h1>;
 }
 
@@ -31,14 +31,12 @@ function UnorderedList() {
   return (
     <ul>
       {todoList.map((task) => (
-        <List key={task.id}>
-          Id: {task.id}, Task: {task.title}
-        </List>
+        <ListItem key={task.id}>Title: {task.title}</ListItem>
       ))}
     </ul>
   );
 }
 
-function List({ children }) {
+function ListItem({ children }) {
   return <li>{children}</li>;
 }
