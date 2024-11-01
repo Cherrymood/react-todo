@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import TodoList from "./TodoList.jsx";
 
 HeadingH1.propTypes = {
-  children: PropTypes.node.isRequired, // Validate children
+  children: PropTypes.node.isRequired,
 };
 
 export default function App() {

@@ -6,12 +6,12 @@ Button.propTypes = {
 export default function AddTodoForm() {
   return (
     <>
-      <from>
+      <form>
         <label htmlFor="todoTitle">Title</label>
         <input type="text" id="todoTitle" />
 
         <Button>Add</Button>
-      </from>
+      </form>
     </>
   );
 }
