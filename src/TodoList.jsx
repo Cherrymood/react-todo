@@ -1,31 +1,48 @@
 import PropTypes from "prop-types";
 import AddTodoForm from "./AddTodoForm";
 
-const todoList = [
-  { id: 1, title: "Add new task" },
-  { id: 2, title: "Edit" },
-  { id: 3, title: "Task done" },
-];
+TodoList.propTypes = {
+  onAddTodo: PropTypes.func.isRequired,
+  todoList: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      title: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+};
+UnorderedList.propTypes = {
+  todoList: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      title: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+};
+
+AddTodoForm.propTypes = {
+  onAddTodo: PropTypes.func.isRequired,
+};
 
 ListItem.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-export default function TodoList() {
+export default function TodoList({ onAddTodo, todoList }) {
   return (
     <>
-      <AddTodoForm />
-      <UnorderedList />
+      <AddTodoForm onAddTodo={onAddTodo} />
+      <UnorderedList todoList={todoList} />
     </>
   );
 }
 
-function UnorderedList() {
+function UnorderedList({ todoList }) {
   return (
     <ul>
-      {todoList.map((task) => (
-        <ListItem key={task.id}>Title: {task.title}</ListItem>
-      ))}
+      {todoList.length > 0 &&
+        todoList.map((task) => (
+          <ListItem key={task.id}>Title: {task.title}</ListItem>
+        ))}
     </ul>
   );
 }
