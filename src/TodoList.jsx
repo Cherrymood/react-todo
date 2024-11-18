@@ -39,10 +39,9 @@ export default function TodoList({ onAddTodo, todoList }) {
 function UnorderedList({ todoList }) {
   return (
     <ul>
-      {todoList.length > 0 &&
-        todoList.map((task) => (
-          <ListItem key={task.id}>Title: {task.title}</ListItem>
-        ))}
+      {todoList.map((task) => (
+        <ListItem key={task.id}>Title: {task.title}</ListItem>
+      ))}
     </ul>
   );
 }

@@ -1,26 +1,25 @@
 import Button from "../public/components/Button";
 import PropTypes from "prop-types";
-import { useState } from "react";
 
 AddTodoForm.propTypes = {
   onAddTodo: PropTypes.func.isRequired,
 };
 
 export default function AddTodoForm({ onAddTodo }) {
-  const [todoTitle, setTodoTitle] = useState("");
-
   function handleAddTodo(e) {
     e.preventDefault();
 
-    const newToDoList = {
-      id: Date.now(),
-      title: todoTitle,
-    };
-    console.log(newToDoList);
+    const newToDoList = e.target.elements.todoTitle.value.trim();
+    console.log(e.target.elements.todoTitle.value.trim());
 
-    if (todoTitle.trim() !== "") {
-      onAddTodo(newToDoList);
-      setTodoTitle("");
+    if (newToDoList) {
+      const newToDoItem = {
+        id: Date.now(),
+        title: newToDoList,
+      };
+
+      onAddTodo(newToDoItem);
+      e.target.reset();
     } else {
       alert("Please enter a valid todo title.");
     }
@@ -30,13 +29,10 @@ export default function AddTodoForm({ onAddTodo }) {
     <>
       <form onSubmit={handleAddTodo}>
         <label htmlFor="todoTitle">Title</label>
-        <input
-          type="text"
-          id="todoTitle"
-          onChange={(e) => setTodoTitle(e.target.value)}
-        />
 
-        <Button OnClick={handleAddTodo}>Add</Button>
+        <input type="text" id="todoTitle" />
+
+        <Button type="submit">Add</Button>
       </form>
     </>
   );
