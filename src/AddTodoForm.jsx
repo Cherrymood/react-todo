@@ -12,17 +12,14 @@ export default function AddTodoForm({ onAddTodo }) {
     const newToDoList = e.target.elements.todoTitle.value.trim();
     console.log(e.target.elements.todoTitle.value.trim());
 
-    if (newToDoList) {
-      const newToDoItem = {
-        id: Date.now(),
-        title: newToDoList,
-      };
+    const newToDoItem = {
+      id: Date.now(),
+      title: newToDoList,
+    };
+    console.log(newToDoItem);
 
-      onAddTodo(newToDoItem);
-      e.target.reset();
-    } else {
-      alert("Please enter a valid todo title.");
-    }
+    onAddTodo(newToDoItem);
+    e.target.reset();
   }
 
   return (

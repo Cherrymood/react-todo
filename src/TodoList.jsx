@@ -1,16 +1,7 @@
 import PropTypes from "prop-types";
-import AddTodoForm from "./AddTodoForm";
+import ListItem from "./TodoListItem";
 
 TodoList.propTypes = {
-  onAddTodo: PropTypes.func.isRequired,
-  todoList: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-      title: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-};
-UnorderedList.propTypes = {
   todoList: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
@@ -19,24 +10,7 @@ UnorderedList.propTypes = {
   ).isRequired,
 };
 
-AddTodoForm.propTypes = {
-  onAddTodo: PropTypes.func.isRequired,
-};
-
-ListItem.propTypes = {
-  children: PropTypes.node.isRequired,
-};
-
-export default function TodoList({ onAddTodo, todoList }) {
-  return (
-    <>
-      <AddTodoForm onAddTodo={onAddTodo} />
-      <UnorderedList todoList={todoList} />
-    </>
-  );
-}
-
-function UnorderedList({ todoList }) {
+export default function TodoList({ todoList }) {
   return (
     <ul>
       {todoList.map((task) => (
@@ -44,8 +18,4 @@ function UnorderedList({ todoList }) {
       ))}
     </ul>
   );
-}
-
-function ListItem({ children }) {
-  return <li>{children}</li>;
 }
