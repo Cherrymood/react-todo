@@ -24,7 +24,7 @@ export default function App() {
     <div className="app">
       <HeadingH1>Todo List</HeadingH1>
       <AddTodoForm onAddTodo={handleNewToDo} />
-      <p>Title: {newTodo.title} </p>
+      <p>{newTodo.title} </p>
       <TodoList todoList={todoList} />
     </div>
   );

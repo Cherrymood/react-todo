@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import ListItem from "./TodoListItem";
+import TodoListItem from "./TodoListItem";
 
 TodoList.propTypes = {
   todoList: PropTypes.arrayOf(
@@ -14,7 +14,7 @@ export default function TodoList({ todoList }) {
   return (
     <ul>
       {todoList.map((task) => (
-        <ListItem key={task.id}>Title: {task.title}</ListItem>
+        <TodoListItem key={task.id} title={task.title} />
       ))}
     </ul>
   );
