@@ -8,5 +8,5 @@ TodoListItem.propTypes = {
 };
 
 export default function TodoListItem({ title }) {
-  return <li>{title}</li>;
+  return <li className="todo-list-item ">{title}</li>;
 }

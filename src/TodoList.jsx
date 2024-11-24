@@ -12,7 +12,7 @@ TodoList.propTypes = {
 
 export default function TodoList({ todoList }) {
   return (
-    <ul>
+    <ul className="todo-list">
       {todoList.map((task) => (
         <TodoListItem key={task.id} title={task.title} />
       ))}

@@ -32,7 +32,7 @@ export default function AddTodoForm({ onAddTodo }) {
   }
 
   return (
-    <>
+    <div className="add-todo-list">
       <form onSubmit={handleAddTodo}>
         <label htmlFor="todoTitle">Title </label>
 
@@ -45,6 +45,6 @@ export default function AddTodoForm({ onAddTodo }) {
 
         <Button type="submit">Add</Button>
       </form>
-    </>
+    </div>
   );
 }
