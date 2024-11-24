@@ -8,19 +8,17 @@ HeadingH1.propTypes = {
 };
 
 export default function App() {
-  const [newTodo, setNewToDo] = useState("");
-
   const [todoList, setToDoList] = useState([]);
 
-  function handleNewToDo(item) {
-    setNewToDo(item);
+  function addTodo(newTodo) {
+    setToDoList([...todoList, newTodo]);
   }
 
   return (
     <div className="app">
+      <img src="to-do-list.png" alt="Main picture" className="app-image" />
       <HeadingH1>Todo List</HeadingH1>
-      <AddTodoForm onAddTodo={handleNewToDo} />
-      <p>{newTodo.title} </p>
+      <AddTodoForm onAddTodo={addTodo} />
       <TodoList todoList={todoList} />
     </div>
   );
