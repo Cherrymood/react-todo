@@ -14,7 +14,7 @@ HeadingH1.propTypes = {
 };
 
 export default function App() {
-  const [newTodo, setNewToDo] = useState([]);
+  const [newTodo, setNewToDo] = useState("");
 
   function handleNewToDo(item) {
     setNewToDo(item);
