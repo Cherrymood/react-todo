@@ -7,6 +7,6 @@ TodoListItem.propTypes = {
   ]).isRequired,
 };
 
-export default function TodoListItem({ title }) {
-  return <li className="todo-list-item ">{title}</li>;
+export default function TodoListItem({ todo }) {
+  return <li className="todo-list-item ">{todo.title}</li>;
 }
