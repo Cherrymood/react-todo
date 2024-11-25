@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 
 TodoListItem.propTypes = {
-  title: PropTypes.oneOfType([
+  todo: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.arrayOf(PropTypes.string),
   ]).isRequired,
