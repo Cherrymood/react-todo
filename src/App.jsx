@@ -3,28 +3,22 @@ import TodoList from "./TodoList.jsx";
 import AddTodoForm from "./AddTodoForm.jsx";
 import { useState } from "react";
 
-const todoList = [
-  { id: 1, title: "Add new task" },
-  { id: 2, title: "Edit" },
-  { id: 3, title: "Task done" },
-];
-
 HeadingH1.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
 export default function App() {
-  const [newTodo, setNewToDo] = useState("");
+  const [todoList, setToDoList] = useState([]);
 
-  function handleNewToDo(item) {
-    setNewToDo(item);
+  function addTodo(newTodo) {
+    setToDoList([...todoList, newTodo]);
   }
 
   return (
     <div className="app">
+      <img src="to-do-list.png" alt="Main picture" className="app-image" />
       <HeadingH1>Todo List</HeadingH1>
-      <AddTodoForm onAddTodo={handleNewToDo} />
-      <p>{newTodo.title} </p>
+      <AddTodoForm onAddTodo={addTodo} />
       <TodoList todoList={todoList} />
     </div>
   );
