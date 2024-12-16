@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Button from "../public/components/Button";
+import Button from "/src/components/Button.jsx";
 import PropTypes from "prop-types";
 import InputWithLabel from "./InputWithLabel";
 
@@ -41,7 +41,9 @@ export default function AddTodoForm({ onAddTodo }) {
         >
           Title
         </InputWithLabel>
-        <Button type="submit">Add</Button>
+        <Button className="button-33" type="submit">
+          Add
+        </Button>
       </form>
     </div>
   );
