@@ -24,7 +24,7 @@ export default [
       "react-refresh": reactRefresh,
     },
     rules: {
-      "react/prop-types": "off",
+      "react/prop-types": 0,
       "react/jsx-no-target-blank": "off",
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
