@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import Button from "/components/Button.jsx";
 
 TodoListItem.propTypes = {
   todo: PropTypes.oneOfType([
@@ -8,5 +9,10 @@ TodoListItem.propTypes = {
 };
 
 export default function TodoListItem({ todo }) {
-  return <li className="todo-list-item ">{todo.title}</li>;
+  return (
+    <li className="todo-list-item">
+      <span>{todo.title}</span>
+      <Button>Remove</Button>
+    </li>
+  );
 }
