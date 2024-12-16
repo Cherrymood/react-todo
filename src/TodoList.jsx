@@ -8,13 +8,14 @@ TodoList.propTypes = {
       title: PropTypes.string.isRequired,
     })
   ).isRequired,
+  onRemoveTodo: PropTypes.func.isRequired,
 };
 
-export default function TodoList({ todoList }) {
+export default function TodoList({ todoList, onRemoveTodo }) {
   return (
     <ul className="todo-list">
       {todoList.map((task) => (
-        <TodoListItem key={task.id} todo={task} />
+        <TodoListItem key={task.id} todo={task} onRemoveTodo={onRemoveTodo} />
       ))}
     </ul>
   );

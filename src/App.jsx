@@ -10,6 +10,7 @@ HeadingH1.propTypes = {
 function useSemiPersistentState() {
   const [todoList, setToDoList] = useState(() => {
     const savedList = localStorage.getItem("savedTodoList");
+
     return savedList ? JSON.parse(savedList) : [];
   });
 
@@ -27,13 +28,17 @@ export default function App() {
     setToDoList([...todoList, newTodo]);
   }
 
+  function removeTodo(id) {
+    setToDoList(todoList.filter((todo) => todo.id !== id));
+  }
+
   return (
     <>
       <div className="app">
         <img src="to-do-list.png" alt="Main picture" className="app-image" />
         <HeadingH1>Todo List</HeadingH1>
         <AddTodoForm onAddTodo={addTodo} />
-        <TodoList todoList={todoList} />
+        <TodoList todoList={todoList} onRemoveTodo={removeTodo} />
       </div>
     </>
   );
