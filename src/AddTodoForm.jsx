@@ -1,6 +1,7 @@
 import { useState } from "react";
-import Button from "../public/components/Button";
+import Button from "/src/components/Button.jsx";
 import PropTypes from "prop-types";
+import InputWithLabel from "./InputWithLabel";
 
 AddTodoForm.propTypes = {
   onAddTodo: PropTypes.func.isRequired,
@@ -34,16 +35,15 @@ export default function AddTodoForm({ onAddTodo }) {
   return (
     <div className="add-todo-list">
       <form onSubmit={handleAddTodo}>
-        <label htmlFor="todoTitle">Title </label>
-
-        <input
-          type="text"
-          id="todoTitle"
-          value={todoTitle} //The input element should use value={todoTitle} to maintain it as a controlled component.
-          onChange={handleTitleChange}
-        />
-
-        <Button type="submit">Add</Button>
+        <InputWithLabel
+          todoTitle={todoTitle}
+          handleTitleChange={handleTitleChange}
+        >
+          Title
+        </InputWithLabel>
+        <Button className="button-33" type="submit">
+          Add
+        </Button>
       </form>
     </div>
   );
