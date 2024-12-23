@@ -27,7 +27,6 @@ export default function App() {
   }
 
   useEffect(() => {
-    // Load todo list from localStorage if available
     const savedTodos = JSON.parse(localStorage.getItem("todoList"));
     if (savedTodos) {
       setToDoList(savedTodos);
@@ -42,7 +41,6 @@ export default function App() {
       })
       .catch((error) => {
         console.error("Operation failed:", error);
-        setIsLoading(false);
       });
   }, []);
 
@@ -64,9 +62,16 @@ export default function App() {
     <>
       <div className="app">
         <img src="to-do-list.png" alt="Main picture" className="app-image" />
+
         <HeadingH1>Todo List</HeadingH1>
+
         <AddTodoForm onAddTodo={addTodo} />
-        <TodoList todoList={todoList} onRemoveTodo={removeTodo} />
+
+        {isLoading ? (
+          <p>Loading...</p>
+        ) : (
+          <TodoList todoList={todoList} onRemoveTodo={removeTodo} />
+        )}
       </div>
     </>
   );
