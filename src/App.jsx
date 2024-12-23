@@ -18,7 +18,13 @@ export default function App() {
         const success = true;
 
         if (success) {
-          resolve();
+          resolve({
+            data: [
+              { id: 1734998055204, title: "Clean roon" },
+              { id: 1734998066475, title: "Bake a cake" },
+              { id: 1734998086843, title: "Make my bed" },
+            ],
+          });
         } else {
           reject("An error occurred during the operation.");
         }
@@ -30,7 +36,6 @@ export default function App() {
     const savedTodos = JSON.parse(localStorage.getItem("todoList"));
     if (savedTodos) {
       setToDoList(savedTodos);
-      setIsLoading(false);
     }
 
     sideEffectHandler()
