@@ -8,11 +8,32 @@ HeadingH1.propTypes = {
 };
 
 export default function App() {
-  const [todoList, setToDoList] = useState(() => {
-    const savedList = localStorage.getItem("savedTodoList");
+  const [todoList, setToDoList] = useState([]);
 
-    return savedList ? JSON.parse(savedList) : [];
-  });
+  function sideEffectHandler() {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const success = true;
+
+        if (success) {
+          resolve("Operation completed successfully after delay!");
+        } else {
+          reject("An error occurred during the operation.");
+        }
+      }, 2000);
+    });
+  }
+
+  useEffect(() => {
+    sideEffectHandler()
+      .then((result) => {
+        console.log("Operation succeeded:", result);
+        setTodoList(result.data);
+      })
+      .catch((error) => {
+        console.error("Operation failed:", error);
+      });
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("savedTodoList", JSON.stringify(todoList));
