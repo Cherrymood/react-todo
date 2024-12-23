@@ -7,7 +7,7 @@ HeadingH1.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-function useSemiPersistentState() {
+export default function App() {
   const [todoList, setToDoList] = useState(() => {
     const savedList = localStorage.getItem("savedTodoList");
 
@@ -17,12 +17,6 @@ function useSemiPersistentState() {
   useEffect(() => {
     localStorage.setItem("savedTodoList", JSON.stringify(todoList));
   }, [todoList]);
-
-  return { todoList, setToDoList };
-}
-
-export default function App() {
-  const { todoList, setToDoList } = useSemiPersistentState();
 
   function addTodo(newTodo) {
     setToDoList([...todoList, newTodo]);
