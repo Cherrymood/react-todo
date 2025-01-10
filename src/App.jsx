@@ -160,11 +160,11 @@ export default function App() {
   // //     });
   // // }, []);
 
-  useEffect(() => {
-    if (!isLoading) {
-      localStorage.setItem("todoList", JSON.stringify(todoList));
-    }
-  }, [todoList, isLoading]);
+  // useEffect(() => {
+  //   if (!isLoading) {
+  //     localStorage.setItem("todoList", JSON.stringify(todoList));
+  //   }
+  // }, [todoList, isLoading]);
 
   return (
     <>
