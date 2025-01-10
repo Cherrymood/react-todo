@@ -7,22 +7,53 @@ HeadingH1.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-function useSemiPersistentState() {
-  const [todoList, setToDoList] = useState(() => {
-    const savedList = localStorage.getItem("savedTodoList");
+export default function App() {
+  const [todoList, setToDoList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-    return savedList ? JSON.parse(savedList) : [];
-  });
+  // Mimicking a side-effect operation with a delay
+  function sideEffectHandler() {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const success = true;
+
+        if (success) {
+          resolve({
+            data: [
+              { id: 1734998055204, title: "Clean roon" },
+              { id: 1734998066475, title: "Bake a cake" },
+              { id: 1734998086843, title: "Make my bed" },
+            ],
+          });
+        } else {
+          reject("An error occurred during the operation.");
+        }
+      }, 2000);
+    });
+  }
 
   useEffect(() => {
-    localStorage.setItem("savedTodoList", JSON.stringify(todoList));
-  }, [todoList]);
+    const savedTodos = JSON.parse(localStorage.getItem("todoList"));
+    if (savedTodos) {
+      setToDoList(savedTodos);
+    }
 
-  return { todoList, setToDoList };
-}
+    sideEffectHandler()
+      .then((result) => {
+        console.log("Operation succeeded:", result);
+        setToDoList(result.data);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error("Operation failed:", error);
+      });
+  }, []);
 
-export default function App() {
-  const { todoList, setToDoList } = useSemiPersistentState();
+  useEffect(() => {
+    if (!isLoading) {
+      localStorage.setItem("todoList", JSON.stringify(todoList));
+    }
+  }, [todoList, isLoading]);
 
   function addTodo(newTodo) {
     setToDoList([...todoList, newTodo]);
@@ -36,9 +67,16 @@ export default function App() {
     <>
       <div className="app">
         <img src="to-do-list.png" alt="Main picture" className="app-image" />
+
         <HeadingH1>Todo List</HeadingH1>
+
         <AddTodoForm onAddTodo={addTodo} />
-        <TodoList todoList={todoList} onRemoveTodo={removeTodo} />
+
+        {isLoading ? (
+          <p>Loading...</p>
+        ) : (
+          <TodoList todoList={todoList} onRemoveTodo={removeTodo} />
+        )}
       </div>
     </>
   );
