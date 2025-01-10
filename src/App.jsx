@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
-import TodoList from "./src/TodoList";
-import AddTodoForm from "./src/AddTodoForm";
+import TodoList from "./TodoList";
+import AddTodoForm from "./AddTodoForm";
 import { useEffect, useState } from "react";
 
 HeadingH1.propTypes = {
@@ -33,25 +33,25 @@ export default function App() {
     setToDoList(todoList.filter((todo) => todo.id !== id));
   }
   // Mimicking a side-effect operation with a delay
-  function sideEffectHandler() {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const success = true;
+  // function sideEffectHandler() {
+  //   return new Promise((resolve, reject) => {
+  //     setTimeout(() => {
+  //       const success = true;
 
-        if (success) {
-          resolve({
-            data: [
-              { id: 1734998055204, title: "Clean room" },
-              { id: 1734998066475, title: "Bake a cake" },
-              { id: 1734998086843, title: "Make my bed" },
-            ],
-          });
-        } else {
-          reject("An error occurred during the operation.");
-        }
-      }, 2000);
-    });
-  }
+  //       if (success) {
+  //         resolve({
+  //           data: [
+  //             { id: 1734998055204, title: "Clean room" },
+  //             { id: 1734998066475, title: "Bake a cake" },
+  //             { id: 1734998086843, title: "Make my bed" },
+  //           ],
+  //         });
+  //       } else {
+  //         reject("An error occurred during the operation.");
+  //       }
+  //     }, 2000);
+  //   });
+  // }
 
   async function fetchData() {
     const options = {
@@ -143,22 +143,22 @@ export default function App() {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    const savedTodos = JSON.parse(localStorage.getItem("todoList"));
-    if (savedTodos) {
-      setToDoList(savedTodos);
-    }
+  // useEffect(() => {
+  //   const savedTodos = JSON.parse(localStorage.getItem("todoList"));
+  //   if (savedTodos) {
+  //     setToDoList(savedTodos);
+  //   }
 
-    sideEffectHandler()
-      .then((result) => {
-        console.log("Operation succeeded:", result);
-        setToDoList(result.data);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.error("Operation failed:", error);
-      });
-  }, []);
+  // //   sideEffectHandler()
+  // //     .then((result) => {
+  // //       console.log("Operation succeeded:", result);
+  // //       setToDoList(result.data);
+  // //       setIsLoading(false);
+  // //     })
+  // //     .catch((error) => {
+  // //       console.error("Operation failed:", error);
+  // //     });
+  // // }, []);
 
   useEffect(() => {
     if (!isLoading) {
@@ -169,11 +169,7 @@ export default function App() {
   return (
     <>
       <div className="app">
-        <img
-          src="public/to-do-list.png"
-          alt="Main picture"
-          className="app-image"
-        />
+        <img src="/to-do-list.png" alt="Main picture" className="app-image" />
 
         <HeadingH1>Todo List</HeadingH1>
 
