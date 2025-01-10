@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import TodoList from "./TodoList";
 import AddTodoForm from "./AddTodoForm";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 HeadingH1.propTypes = {
@@ -167,21 +168,30 @@ export default function App() {
   // }, [todoList, isLoading]);
 
   return (
-    <>
-      <div className="app">
-        <img src="/to-do-list.png" alt="Main picture" className="app-image" />
+    <div className="app">
+      <img src="/to-do-list.png" alt="Main picture" className="app-image" />
 
-        <HeadingH1>Todo List</HeadingH1>
-
-        <AddTodoForm onAddTodo={addTodoHandler} />
-
-        {isLoading ? (
-          <p>Loading...</p>
-        ) : (
-          <TodoList todoList={todoList} onRemoveTodo={removeTodo} />
-        )}
-      </div>
-    </>
+      <BrowserRouter>
+        <Routes>
+          {/* Define the route for the root path */}
+          <Route
+            path="/"
+            element={
+              <>
+                <HeadingH1>Todo List</HeadingH1>
+                <AddTodoForm onAddTodo={addTodoHandler} />
+                {isLoading ? (
+                  <p>Loading...</p>
+                ) : (
+                  <TodoList todoList={todoList} onRemoveTodo={removeTodo} />
+                )}
+              </>
+            }
+          />
+          <Route path="/new" element={<HeadingH1>New Todo List </HeadingH1>} />
+        </Routes>
+      </BrowserRouter>
+    </div>
   );
 }
 
