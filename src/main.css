@@ -1,3 +1,15 @@
+/* Set background color and default text color */
+body {
+  background-color: #f4f4f9; /* Light gray background */
+  color: #333; /* Default text color */
+  font-family: "Roboto", Arial, sans-serif; /* Default font family */
+  margin: 50;
+  padding: 10;
+}
+
+/* Load Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+
 .app {
   display: flex;
   flex-direction: column;
@@ -91,55 +103,4 @@
     rgba(44, 187, 99, 0.25) 0 4px 8px, rgba(44, 187, 99, 0.25) 0 8px 16px,
     rgba(44, 187, 99, 0.25) 0 16px 32px;
   transform: scale(1.05) rotate(-1deg);
-}
-
-@media (min-width: 600px) {
-  .app h1 {
-    font-size: 2rem;
-  }
-
-  .add-todo-list {
-    width: 80%;
-  }
-
-  #todoTitle {
-    font-size: 16px;
-  }
-
-  .button-33 {
-    padding: 10px 25px;
-    font-size: 18px;
-  }
-}
-
-/* Desktop (>= 1024px) */
-@media (min-width: 1024px) {
-  .app {
-    min-height: 60vh;
-  }
-
-  .app-image {
-    width: 400px;
-  }
-
-  .add-todo-list {
-    width: 70%;
-  }
-}
-
-/* Large screens (>= 1440px) */
-@media (min-width: 1440px) {
-  .app {
-    flex-direction: row;
-    justify-content: space-around;
-  }
-
-  .app-image {
-    width: 300px;
-    height: 300px;
-  }
-
-  .add-todo-list {
-    width: 50%;
-  }
 }
