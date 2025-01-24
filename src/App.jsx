@@ -1,12 +1,7 @@
-import PropTypes from "prop-types";
 import TodoList from "./TodoList";
 import AddTodoForm from "./AddTodoForm";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useEffect, useState } from "react";
-
-HeadingH1.propTypes = {
-  children: PropTypes.node.isRequired,
-};
 
 // const apiToken = import.meta.env.VITE_AIRTABLE_API_TOKEN;
 // const baseId = import.meta.env.VITE_AIRTABLE_BASE_ID;
@@ -33,26 +28,6 @@ export default function App() {
   function removeTodo(id) {
     setToDoList(todoList.filter((todo) => todo.id !== id));
   }
-  // Mimicking a side-effect operation with a delay
-  // function sideEffectHandler() {
-  //   return new Promise((resolve, reject) => {
-  //     setTimeout(() => {
-  //       const success = true;
-
-  //       if (success) {
-  //         resolve({
-  //           data: [
-  //             { id: 1734998055204, title: "Clean room" },
-  //             { id: 1734998066475, title: "Bake a cake" },
-  //             { id: 1734998086843, title: "Make my bed" },
-  //           ],
-  //         });
-  //       } else {
-  //         reject("An error occurred during the operation.");
-  //       }
-  //     }, 2000);
-  //   });
-  // }
 
   async function fetchData() {
     const options = {
@@ -143,29 +118,6 @@ export default function App() {
   useEffect(() => {
     fetchData();
   }, []);
-
-  // useEffect(() => {
-  //   const savedTodos = JSON.parse(localStorage.getItem("todoList"));
-  //   if (savedTodos) {
-  //     setToDoList(savedTodos);
-  //   }
-
-  // //   sideEffectHandler()
-  // //     .then((result) => {
-  // //       console.log("Operation succeeded:", result);
-  // //       setToDoList(result.data);
-  // //       setIsLoading(false);
-  // //     })
-  // //     .catch((error) => {
-  // //       console.error("Operation failed:", error);
-  // //     });
-  // // }, []);
-
-  // useEffect(() => {
-  //   if (!isLoading) {
-  //     localStorage.setItem("todoList", JSON.stringify(todoList));
-  //   }
-  // }, [todoList, isLoading]);
 
   return (
     <div className="app">
