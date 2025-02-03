@@ -24,3 +24,7 @@ export default function InputWithLabel({
     </>
   );
 }
+
+InputWithLabel.propTypes = {
+  InputWithLabel: PropTypes.func,
+};
