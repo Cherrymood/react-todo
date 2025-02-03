@@ -12,3 +12,6 @@ export default function TodoList({ todoList, onRemoveTodo }) {
     </ul>
   );
 }
+TodoList.propTypes = {
+  TodoList: PropTypes.func,
+};
