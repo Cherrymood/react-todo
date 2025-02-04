@@ -3,12 +3,6 @@ import AddTodoForm from "./components/AddTodoForm";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-// const apiToken = import.meta.env.VITE_AIRTABLE_API_TOKEN;
-// const baseId = import.meta.env.VITE_AIRTABLE_BASE_ID;
-// const tableName = import.meta.env.VITE_TABLE_NAME;
-
-// console.log(apiToken, baseId, tableName);
-
 export default function App() {
   const [todoList, setToDoList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -25,8 +19,13 @@ export default function App() {
     }
   }
 
-  function removeTodo(id) {
-    setToDoList(todoList.filter((todo) => todo.id !== id));
+  async function removeTodo(id) {
+    const result = await fetchDataDelete(id);
+    if (result.success) {
+      setToDoList(todoList.filter((todo) => todo.id !== id));
+    } else {
+      console.error("Failed to delete todo:", result.error);
+    }
   }
 
   async function fetchData() {
@@ -80,8 +79,6 @@ export default function App() {
         },
       };
 
-      // console.log(airtableData);
-
       const response = await fetch(
         `https://api.airtable.com/v0/${
           import.meta.env.VITE_AIRTABLE_BASE_ID
@@ -96,22 +93,43 @@ export default function App() {
         }
       );
 
-      // console.log(response);
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const result = await response.json();
+      return { id: result.id, title: result.fields.Title };
+    } catch (error) {
+      console.error("Error posting data:", error);
+      return null;
+    }
+  }
+
+  async function fetchDataDelete(recordId) {
+    try {
+      const response = await fetch(
+        `https://api.airtable.com/v0/${
+          import.meta.env.VITE_AIRTABLE_BASE_ID
+        }/Default/${recordId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${import.meta.env.VITE_AIRTABLE_API_TOKEN}`,
+          },
+        }
+      );
 
       if (!response.ok) {
-        const message = `Error has ocurred:
-                               ${response.status}`;
+        const message = `Error has occurred: ${response.status}`;
         throw new Error(message);
       }
 
       const dataResponse = await response.json();
 
-      // console.log({ id: dataResponse.id, title: dataResponse.fields.Title });
-
-      return { id: dataResponse.id, title: dataResponse.fields.Title };
+      return { success: true, deletedId: recordId };
     } catch (error) {
       console.log(error.message);
-      return null;
+      return { success: false, error: error.message };
     }
   }
 

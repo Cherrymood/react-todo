@@ -1,5 +1,6 @@
 import Button from "/src/components/Button.jsx";
 import styles from "./ToDoListItem.module.css";
+import PropTypes from "prop-types";
 
 export default function TodoListItem({ todo, onRemoveTodo }) {
   return (
