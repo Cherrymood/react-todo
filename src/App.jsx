@@ -2,10 +2,14 @@ import TodoList from "./components/TodoList";
 import AddTodoForm from "./components/AddTodoForm";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useEffect, useState } from "react";
+import Button from "./components/Button";
+import SearchList from "./components/SerachList";
 
 export default function App() {
   const [todoList, setToDoList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredTodos, setFilteredTodos] = useState([]);
 
   async function addTodoHandler(newTodo) {
     // console.log(newTodo);
@@ -18,6 +22,26 @@ export default function App() {
       console.error("Failed to add todo.");
     }
   }
+
+  function handleSearch(todo) {
+    setSearchTerm(todo);
+  }
+
+  function handleReturn() {
+    setSearchTerm("");
+    setFilteredTodos(todoList);
+  }
+
+  useEffect(() => {
+    if (searchTerm === "") {
+      setFilteredTodos([]);
+    } else {
+      const filtered = todoList.filter((todo) =>
+        todo.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredTodos(filtered);
+    }
+  }, [searchTerm, todoList]); // Dependency array ensures filtering updates when searchTerm or todoList changes
 
   async function removeTodo(id) {
     const result = await fetchDataDelete(id);
@@ -149,16 +173,32 @@ export default function App() {
             element={
               <>
                 <HeadingH1>Todo List</HeadingH1>
-                <AddTodoForm onAddTodo={addTodoHandler} />
+
+                <AddTodoForm
+                  onAddTodo={addTodoHandler}
+                  onSearch={handleSearch}
+                />
                 {isLoading ? (
                   <p>Loading...</p>
+                ) : searchTerm ? (
+                  filteredTodos.length > 0 ? (
+                    <>
+                      <SearchList filteredTodos={filteredTodos} />
+                      <Button onClick={handleReturn}>Return</Button>
+                    </>
+                  ) : (
+                    <>
+                      <p>No results found</p>
+                      <Button onClick={handleReturn}>Return</Button>
+                    </>
+                  )
                 ) : (
                   <TodoList todoList={todoList} onRemoveTodo={removeTodo} />
                 )}
               </>
             }
           />
-          <Route path="/new" element={<HeadingH1>New Todo List </HeadingH1>} />
+          <Route path="/new" element={<HeadingH1>New Todo List</HeadingH1>} />
         </Routes>
       </BrowserRouter>
     </div>
