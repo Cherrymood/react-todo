@@ -188,3 +188,28 @@ h1 {
   font-style: italic;
   margin-top: 20px;
 }
+
+select {
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  /* padding: 5px; */
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+select:hover {
+  border-color: #4caf50; /* Green border on hover */
+}
+
+select:focus {
+  border-color: #45a049; /* Darker green when focused */
+}
+
+.select-wrapper {
+  display: inline-block;
+  position: relative;
+}

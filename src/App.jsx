@@ -10,16 +10,29 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredTodos, setFilteredTodos] = useState([]);
+  const [sortOrder, setSortOrder] = useState("asc");
 
-  async function addTodoHandler(newTodo) {
-    // console.log(newTodo);
+  async function handleAddTodo(newTodo) {
+    try {
+      setIsLoading(true);
 
-    const addedTodo = await fetchDataPost(newTodo);
+      console.log("newTodo", newTodo);
 
-    if (addedTodo) {
-      setToDoList((prevTodoList) => [...prevTodoList, addedTodo]);
-    } else {
-      console.error("Failed to add todo.");
+      const addedTodo = await fetchDataPost(newTodo);
+
+      console.log("addedTodo", addedTodo);
+
+      if (addedTodo) {
+        setToDoList((prevTodoList) => [...prevTodoList, addedTodo]);
+
+        console.log("after", todoList);
+      } else {
+        throw new Error("Failed to add todo.");
+      }
+    } catch (error) {
+      console.error("Error adding todo:", error);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -41,7 +54,7 @@ export default function App() {
       );
       setFilteredTodos(filtered);
     }
-  }, [searchTerm, todoList]); // Dependency array ensures filtering updates when searchTerm or todoList changes
+  }, [searchTerm]);
 
   async function removeTodo(id) {
     const result = await fetchDataDelete(id);
@@ -73,19 +86,12 @@ export default function App() {
       }
 
       const data = await response.json();
-      console.log("Airtable API response:", data);
+      // console.log("Airtable API response:", data);
 
       const todos = data.records.map((todo) => ({
         id: todo.id,
         title: todo.fields.Title,
       }));
-
-      // Log todos (optional)
-      todos.forEach((todo) => {
-        console.log(`New ID: ${todo.id}`);
-        console.log(`New TITLE: ${todo.title}`);
-        console.log(`New Todo:`, todo);
-      });
 
       setToDoList(todos);
 
@@ -100,6 +106,7 @@ export default function App() {
       const airtableData = {
         fields: {
           Title: data.title,
+          created: Date.now().toString(),
         },
       };
 
@@ -118,14 +125,18 @@ export default function App() {
       );
 
       if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
+        const message = `Error has ocurred:
+                               ${response.status}`;
+        throw new Error(message);
       }
 
       const result = await response.json();
+      console.log("result", result);
+
       return { id: result.id, title: result.fields.Title };
     } catch (error) {
       console.error("Error posting data:", error);
-      return null;
+      return { error: error.message };
     }
   }
 
@@ -148,7 +159,7 @@ export default function App() {
         throw new Error(message);
       }
 
-      const dataResponse = await response.json();
+      // const dataResponse = await response.json();
 
       return { success: true, deletedId: recordId };
     } catch (error) {
@@ -156,10 +167,22 @@ export default function App() {
       return { success: false, error: error.message };
     }
   }
+  function toggleSortOrder() {
+    setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+  }
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const sortedTodos = [...todoList].sort((a, b) => {
+      return sortOrder === "asc"
+        ? a.title.localeCompare(b.title)
+        : b.title.localeCompare(a.title);
+    });
+    setToDoList(sortedTodos);
+  }, [sortOrder]);
 
   return (
     <div className="app">
@@ -167,7 +190,6 @@ export default function App() {
 
       <BrowserRouter>
         <Routes>
-          {/* Define the route for the root path */}
           <Route
             path="/"
             element={
@@ -175,8 +197,9 @@ export default function App() {
                 <HeadingH1>Todo List</HeadingH1>
 
                 <AddTodoForm
-                  onAddTodo={addTodoHandler}
+                  onAddTodo={handleAddTodo}
                   onSearch={handleSearch}
+                  onSort={toggleSortOrder}
                 />
                 {isLoading ? (
                   <p>Loading...</p>
