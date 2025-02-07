@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Button from "./components/Button";
 import SearchList from "./components/SerachList";
+import Pagination from "./components/Pagination";
 
 export default function App() {
   const [todoList, setToDoList] = useState([]);
@@ -11,6 +12,8 @@ export default function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredTodos, setFilteredTodos] = useState([]);
   const [sortOrder, setSortOrder] = useState("asc");
+  const [currentPage, setcurrentPage] = useState(1);
+  const [todoPerPage, setTodoPerPage] = useState(5);
 
   async function handleAddTodo(newTodo) {
     try {
@@ -111,9 +114,9 @@ export default function App() {
       };
 
       const response = await fetch(
-        `https://api.airtable.com/v0/${
-          import.meta.env.VITE_AIRTABLE_BASE_ID
-        }/Default`,
+        `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${
+          import.meta.env.VITE_TABLE_NAME
+        }`,
         {
           method: "POST",
           headers: {
@@ -143,9 +146,9 @@ export default function App() {
   async function fetchDataDelete(recordId) {
     try {
       const response = await fetch(
-        `https://api.airtable.com/v0/${
-          import.meta.env.VITE_AIRTABLE_BASE_ID
-        }/Default/${recordId}`,
+        `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${
+          import.meta.env.VITE_TABLE_NAME
+        }/${recordId}`,
         {
           method: "DELETE",
           headers: {
@@ -184,6 +187,10 @@ export default function App() {
     setToDoList(sortedTodos);
   }, [sortOrder]);
 
+  const indexOfLastTodo = currentPage * todoPerPage;
+  const indexOfFirstTodo = indexOfLastTodo - todoPerPage;
+  const currentTodos = todoList.slice(indexOfFirstTodo, indexOfLastTodo);
+
   return (
     <div className="app">
       <img src="/to-do-list.png" alt="Main picture" className="app-image" />
@@ -216,8 +223,14 @@ export default function App() {
                     </>
                   )
                 ) : (
-                  <TodoList todoList={todoList} onRemoveTodo={removeTodo} />
+                  <TodoList todoList={currentTodos} onRemoveTodo={removeTodo} />
                 )}
+                <Pagination
+                  todoPerPage={todoPerPage}
+                  totalTodos={todoList.length}
+                  setCurrentPage={setcurrentPage}
+                  currentPage={currentPage}
+                />
               </>
             }
           />

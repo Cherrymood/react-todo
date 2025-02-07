@@ -202,11 +202,11 @@ select {
 }
 
 select:hover {
-  border-color: #4caf50; /* Green border on hover */
+  border-color: #4caf50;
 }
 
 select:focus {
-  border-color: #45a049; /* Darker green when focused */
+  border-color: #45a049;
 }
 
 .select-wrapper {
