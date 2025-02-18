@@ -1,0 +1,36 @@
+.pagination {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 10px;
+  gap: 8px;
+}
+
+.page-item {
+  display: inline-block;
+}
+
+.page-link {
+  display: block;
+  padding: 8px 12px;
+  text-decoration: none;
+  font-weight: 600;
+  color: #555;
+  border-radius: 6px;
+  transition: all 0.3s ease-in-out;
+  border: 1px solid #ddd;
+  background-color: #fff;
+}
+
+.page-link:hover {
+  background-color: #f0f0f0;
+  color: #333;
+  transform: translateY(-2px);
+}
+
+.active .page-link {
+  background-color: #4caf50;
+  color: white;
+  border-color: #4caf50;
+  transform: scale(1.1);
+}
