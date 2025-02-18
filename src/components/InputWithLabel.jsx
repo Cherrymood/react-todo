@@ -28,4 +28,6 @@ export default function InputWithLabel({
 
 InputWithLabel.propTypes = {
   InputWithLabel: PropTypes.func,
+  todoTitle: PropTypes.string.isRequired,
+  handleTitleChange: PropTypes.func.isRequired,
 };
