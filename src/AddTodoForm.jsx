@@ -43,3 +43,8 @@ export default function AddTodoForm({ onAddTodo }) {
     </div>
   );
 }
+
+AddTodoForm.propTypes = {
+  onAddTodo: PropTypes.func,
+  onSearch: PropTypes.func,
+};
