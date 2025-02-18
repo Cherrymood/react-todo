@@ -1,17 +1,15 @@
-import TodoList from "./TodoList";
-import AddTodoForm from "./AddTodoForm";
+import TodoList from "./components/TodoList";
+import AddTodoForm from "./components/AddTodoForm";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useEffect, useState } from "react";
-
-// const apiToken = import.meta.env.VITE_AIRTABLE_API_TOKEN;
-// const baseId = import.meta.env.VITE_AIRTABLE_BASE_ID;
-// const tableName = import.meta.env.VITE_TABLE_NAME;
-
-// console.log(apiToken, baseId, tableName);
+import Button from "./components/Button";
+import SearchList from "./components/SerachList";
 
 export default function App() {
   const [todoList, setToDoList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredTodos, setFilteredTodos] = useState([]);
 
   async function addTodoHandler(newTodo) {
     // console.log(newTodo);
@@ -25,8 +23,33 @@ export default function App() {
     }
   }
 
-  function removeTodo(id) {
-    setToDoList(todoList.filter((todo) => todo.id !== id));
+  function handleSearch(todo) {
+    setSearchTerm(todo);
+  }
+
+  function handleReturn() {
+    setSearchTerm("");
+    setFilteredTodos(todoList);
+  }
+
+  useEffect(() => {
+    if (searchTerm === "") {
+      setFilteredTodos([]);
+    } else {
+      const filtered = todoList.filter((todo) =>
+        todo.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredTodos(filtered);
+    }
+  }, [searchTerm, todoList]); // Dependency array ensures filtering updates when searchTerm or todoList changes
+
+  async function removeTodo(id) {
+    const result = await fetchDataDelete(id);
+    if (result.success) {
+      setToDoList(todoList.filter((todo) => todo.id !== id));
+    } else {
+      console.error("Failed to delete todo:", result.error);
+    }
   }
 
   async function fetchData() {
@@ -80,8 +103,6 @@ export default function App() {
         },
       };
 
-      // console.log(airtableData);
-
       const response = await fetch(
         `https://api.airtable.com/v0/${
           import.meta.env.VITE_AIRTABLE_BASE_ID
@@ -96,22 +117,43 @@ export default function App() {
         }
       );
 
-      // console.log(response);
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const result = await response.json();
+      return { id: result.id, title: result.fields.Title };
+    } catch (error) {
+      console.error("Error posting data:", error);
+      return null;
+    }
+  }
+
+  async function fetchDataDelete(recordId) {
+    try {
+      const response = await fetch(
+        `https://api.airtable.com/v0/${
+          import.meta.env.VITE_AIRTABLE_BASE_ID
+        }/Default/${recordId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${import.meta.env.VITE_AIRTABLE_API_TOKEN}`,
+          },
+        }
+      );
 
       if (!response.ok) {
-        const message = `Error has ocurred:
-                               ${response.status}`;
+        const message = `Error has occurred: ${response.status}`;
         throw new Error(message);
       }
 
       const dataResponse = await response.json();
 
-      // console.log({ id: dataResponse.id, title: dataResponse.fields.Title });
-
-      return { id: dataResponse.id, title: dataResponse.fields.Title };
+      return { success: true, deletedId: recordId };
     } catch (error) {
       console.log(error.message);
-      return null;
+      return { success: false, error: error.message };
     }
   }
 
@@ -131,16 +173,32 @@ export default function App() {
             element={
               <>
                 <HeadingH1>Todo List</HeadingH1>
-                <AddTodoForm onAddTodo={addTodoHandler} />
+
+                <AddTodoForm
+                  onAddTodo={addTodoHandler}
+                  onSearch={handleSearch}
+                />
                 {isLoading ? (
                   <p>Loading...</p>
+                ) : searchTerm ? (
+                  filteredTodos.length > 0 ? (
+                    <>
+                      <SearchList filteredTodos={filteredTodos} />
+                      <Button onClick={handleReturn}>Return</Button>
+                    </>
+                  ) : (
+                    <>
+                      <p>No results found</p>
+                      <Button onClick={handleReturn}>Return</Button>
+                    </>
+                  )
                 ) : (
                   <TodoList todoList={todoList} onRemoveTodo={removeTodo} />
                 )}
               </>
             }
           />
-          <Route path="/new" element={<HeadingH1>New Todo List </HeadingH1>} />
+          <Route path="/new" element={<HeadingH1>New Todo List</HeadingH1>} />
         </Routes>
       </BrowserRouter>
     </div>
