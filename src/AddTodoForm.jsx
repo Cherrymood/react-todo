@@ -1,11 +1,6 @@
 import { useState } from "react";
 import Button from "/src/components/Button.jsx";
-import PropTypes from "prop-types";
 import InputWithLabel from "./InputWithLabel";
-
-AddTodoForm.propTypes = {
-  onAddTodo: PropTypes.func.isRequired,
-};
 
 export default function AddTodoForm({ onAddTodo }) {
   const [todoTitle, setTodoTitle] = useState("");

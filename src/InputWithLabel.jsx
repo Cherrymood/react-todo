@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import { useEffect, useRef } from "react";
 
 export default function InputWithLabel({
@@ -25,10 +24,3 @@ export default function InputWithLabel({
     </>
   );
 }
-
-// Adding PropTypes for validation
-InputWithLabel.propTypes = {
-  todoTitle: PropTypes.string.isRequired,
-  children: PropTypes.string.isRequired,
-  handleTitleChange: PropTypes.func.isRequired,
-};
