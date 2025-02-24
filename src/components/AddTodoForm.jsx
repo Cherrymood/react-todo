@@ -16,7 +16,6 @@ export default function AddTodoForm({
   function handleTitleChange(e) {
     setTodoTitle(e.target.value);
     setisAddtitle(true);
-
   }
 
   function handleAddTodo(e) {
@@ -27,8 +26,6 @@ export default function AddTodoForm({
         id: Date.now(),
         title: todoTitle,
       };
-
-      console.log("AddTodoForm", newTodoTitle);
 
       onAddTodo(newTodoTitle);
 
@@ -66,9 +63,6 @@ export default function AddTodoForm({
           Add
         </Button>
 
-        {/* <Button className="button-33" type="submit" onClick={handleInput}>
-          Search
-        </Button> */}
         <Button className="button-33" type="button" onClick={handleInput}>
           Search
         </Button>

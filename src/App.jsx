@@ -18,11 +18,7 @@ export default function App() {
     try {
       setIsLoading(true);
 
-      console.log("newTodo", newTodo);
-
       const addedTodo = await fetchDataPost(newTodo);
-
-      console.log("addedTodo", addedTodo);
 
       if (addedTodo) {
         setToDoList((prevTodoList) => [...prevTodoList, addedTodo]);
@@ -79,7 +75,6 @@ export default function App() {
       }
 
       const data = await response.json();
-      // console.log("Airtable API response:", data);
 
       const todos = data.records.map((todo) => ({
         id: todo.id,
@@ -117,6 +112,15 @@ export default function App() {
         }
       );
 
+      if (!response.ok) {
+        const message = `Error has ocurred:
+                                 ${response.status}`;
+        throw new Error(message);
+      }
+
+      const result = await response.json();
+      console.log("result", result);
+
       return { id: result.id, title: result.fields.Title };
     } catch (error) {
       console.error("Error posting data:", error);
@@ -142,8 +146,6 @@ export default function App() {
         const message = `Error has occurred: ${response.status}`;
         throw new Error(message);
       }
-
-      // const dataResponse = await response.json();
 
       return { success: true, deletedId: recordId };
     } catch (error) {
