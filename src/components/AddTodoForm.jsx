@@ -3,8 +3,9 @@ import Button from "/src/components/Button.jsx";
 import InputWithLabel from "./InputWithLabel";
 import PropTypes from "prop-types";
 
-export default function AddTodoForm({ onAddTodo }) {
+export default function AddTodoForm({ onAddTodo, onSearch }) {
   const [todoTitle, setTodoTitle] = useState("");
+  const [isSearch, setIsSearch] = useState(false);
 
   function handleTitleChange(e) {
     setTodoTitle(e.target.value);
@@ -18,8 +19,6 @@ export default function AddTodoForm({ onAddTodo }) {
       title: todoTitle,
     };
 
-    console.log(newTodoTitle);
-
     if (todoTitle.trim() !== "") {
       onAddTodo(newTodoTitle);
       setTodoTitle("");
@@ -28,9 +27,21 @@ export default function AddTodoForm({ onAddTodo }) {
     }
   }
 
+  function handleInput() {
+    setIsSearch(true); // Trigger search mode
+  }
+
+  function handleSearch(e) {
+    e.preventDefault();
+    // console.log(todoTitle);
+    onSearch(todoTitle);
+    setIsSearch(false);
+    setTodoTitle("");
+  }
+
   return (
     <div className="add-todo-list">
-      <form onSubmit={handleAddTodo}>
+      <form onSubmit={isSearch ? handleSearch : handleAddTodo}>
         <InputWithLabel
           todoTitle={todoTitle}
           handleTitleChange={handleTitleChange}
@@ -39,6 +50,9 @@ export default function AddTodoForm({ onAddTodo }) {
         </InputWithLabel>
         <Button className="button-33" type="submit">
           Add
+        </Button>
+        <Button className="button-33" type="submit" onClick={handleInput}>
+          Search
         </Button>
       </form>
     </div>
