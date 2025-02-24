@@ -4,22 +4,38 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Button from "./components/Button";
 import SearchList from "./components/SerachList";
+import Pagination from "./components/Pagination";
 
 export default function App() {
   const [todoList, setToDoList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredTodos, setFilteredTodos] = useState([]);
+  const [sortOrder, setSortOrder] = useState("asc");
+  const [currentPage, setcurrentPage] = useState(1);
+  const [todoPerPage, setTodoPerPage] = useState(5);
 
-  async function addTodoHandler(newTodo) {
-    // console.log(newTodo);
+  async function handleAddTodo(newTodo) {
+    try {
+      setIsLoading(true);
 
-    const addedTodo = await fetchDataPost(newTodo);
+      console.log("newTodo", newTodo);
 
-    if (addedTodo) {
-      setToDoList((prevTodoList) => [...prevTodoList, addedTodo]);
-    } else {
-      console.error("Failed to add todo.");
+      const addedTodo = await fetchDataPost(newTodo);
+
+      console.log("addedTodo", addedTodo);
+
+      if (addedTodo) {
+        setToDoList((prevTodoList) => [...prevTodoList, addedTodo]);
+
+        console.log("after", todoList);
+      } else {
+        throw new Error("Failed to add todo.");
+      }
+    } catch (error) {
+      console.error("Error adding todo:", error);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -41,7 +57,7 @@ export default function App() {
       );
       setFilteredTodos(filtered);
     }
-  }, [searchTerm, todoList]); // Dependency array ensures filtering updates when searchTerm or todoList changes
+  }, [searchTerm]);
 
   async function removeTodo(id) {
     const result = await fetchDataDelete(id);
@@ -62,7 +78,9 @@ export default function App() {
 
     const url = `https://api.airtable.com/v0/${
       import.meta.env.VITE_AIRTABLE_BASE_ID
-    }/${import.meta.env.VITE_TABLE_NAME}`;
+    }/${
+      import.meta.env.VITE_TABLE_NAME
+    }?view=Grid%20view&sort[0][field]=Title&sort[0][direction]=asc`;
 
     try {
       setIsLoading(true);
@@ -73,19 +91,12 @@ export default function App() {
       }
 
       const data = await response.json();
-      console.log("Airtable API response:", data);
+      // console.log("Airtable API response:", data);
 
       const todos = data.records.map((todo) => ({
         id: todo.id,
         title: todo.fields.Title,
       }));
-
-      // Log todos (optional)
-      todos.forEach((todo) => {
-        console.log(`New ID: ${todo.id}`);
-        console.log(`New TITLE: ${todo.title}`);
-        console.log(`New Todo:`, todo);
-      });
 
       setToDoList(todos);
 
@@ -100,13 +111,14 @@ export default function App() {
       const airtableData = {
         fields: {
           Title: data.title,
+          created: Date.now().toString(),
         },
       };
 
       const response = await fetch(
-        `https://api.airtable.com/v0/${
-          import.meta.env.VITE_AIRTABLE_BASE_ID
-        }/Default`,
+        `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${
+          import.meta.env.VITE_TABLE_NAME
+        }`,
         {
           method: "POST",
           headers: {
@@ -117,24 +129,19 @@ export default function App() {
         }
       );
 
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
-
-      const result = await response.json();
       return { id: result.id, title: result.fields.Title };
     } catch (error) {
       console.error("Error posting data:", error);
-      return null;
+      return { error: error.message };
     }
   }
 
   async function fetchDataDelete(recordId) {
     try {
       const response = await fetch(
-        `https://api.airtable.com/v0/${
-          import.meta.env.VITE_AIRTABLE_BASE_ID
-        }/Default/${recordId}`,
+        `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${
+          import.meta.env.VITE_TABLE_NAME
+        }/${recordId}`,
         {
           method: "DELETE",
           headers: {
@@ -148,7 +155,7 @@ export default function App() {
         throw new Error(message);
       }
 
-      const dataResponse = await response.json();
+      // const dataResponse = await response.json();
 
       return { success: true, deletedId: recordId };
     } catch (error) {
@@ -156,10 +163,26 @@ export default function App() {
       return { success: false, error: error.message };
     }
   }
+  function toggleSortOrder() {
+    setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+  }
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const sortedTodos = [...todoList].sort((a, b) => {
+      return sortOrder === "asc"
+        ? a.title.localeCompare(b.title)
+        : b.title.localeCompare(a.title);
+    });
+    setToDoList(sortedTodos);
+  }, [sortOrder]);
+
+  const indexOfLastTodo = currentPage * todoPerPage;
+  const indexOfFirstTodo = indexOfLastTodo - todoPerPage;
+  const currentTodos = todoList.slice(indexOfFirstTodo, indexOfLastTodo);
 
   return (
     <div className="app">
@@ -167,7 +190,6 @@ export default function App() {
 
       <BrowserRouter>
         <Routes>
-          {/* Define the route for the root path */}
           <Route
             path="/"
             element={
@@ -175,8 +197,10 @@ export default function App() {
                 <HeadingH1>Todo List</HeadingH1>
 
                 <AddTodoForm
-                  onAddTodo={addTodoHandler}
+
+                  onAddTodo={handleAddTodo}
                   onSearch={handleSearch}
+                  onSort={toggleSortOrder}
                 />
                 {isLoading ? (
                   <p>Loading...</p>
@@ -193,8 +217,14 @@ export default function App() {
                     </>
                   )
                 ) : (
-                  <TodoList todoList={todoList} onRemoveTodo={removeTodo} />
+                  <TodoList todoList={currentTodos} onRemoveTodo={removeTodo} />
                 )}
+                <Pagination
+                  todoPerPage={todoPerPage}
+                  totalTodos={todoList.length}
+                  setCurrentPage={setcurrentPage}
+                  currentPage={currentPage}
+                />
               </>
             }
           />
