@@ -1,7 +1,7 @@
 import TodoList from "./components/TodoList";
 import AddTodoForm from "./components/AddTodoForm";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import Button from "./components/Button";
 import SearchList from "./components/SerachList";
 import Pagination from "./components/Pagination";
@@ -47,17 +47,6 @@ export default function App() {
     setSearchTerm("");
     setFilteredTodos(todoList);
   }
-
-  useEffect(() => {
-    if (searchTerm === "") {
-      setFilteredTodos([]);
-    } else {
-      const filtered = todoList.filter((todo) =>
-        todo.title.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      setFilteredTodos(filtered);
-    }
-  }, [searchTerm]);
 
   async function removeTodo(id) {
     const result = await fetchDataDelete(id);
@@ -171,18 +160,31 @@ export default function App() {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    const sortedTodos = [...todoList].sort((a, b) => {
+  const currentTodos = useMemo(() => {
+    let currentTodos = [...todoList];
+
+    if (searchTerm) {
+      if (searchTerm === "") {
+        setFilteredTodos([]);
+      } else {
+        const filtered = todoList.filter((todo) =>
+          todo.title.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        setFilteredTodos(filtered);
+      }
+    }
+
+    currentTodos.sort((a, b) => {
       return sortOrder === "asc"
         ? a.title.localeCompare(b.title)
         : b.title.localeCompare(a.title);
     });
-    setToDoList(sortedTodos);
-  }, [sortOrder]);
 
-  const indexOfLastTodo = currentPage * todoPerPage;
-  const indexOfFirstTodo = indexOfLastTodo - todoPerPage;
-  const currentTodos = todoList.slice(indexOfFirstTodo, indexOfLastTodo);
+    const indexOfLastTodo = currentPage * todoPerPage;
+    const indexOfFirstTodo = indexOfLastTodo - todoPerPage;
+
+    return currentTodos.slice(indexOfFirstTodo, indexOfLastTodo);
+  }, [todoList, searchTerm, sortOrder, currentPage]);
 
   return (
     <div className="app">
@@ -197,7 +199,6 @@ export default function App() {
                 <HeadingH1>Todo List</HeadingH1>
 
                 <AddTodoForm
-
                   onAddTodo={handleAddTodo}
                   onSearch={handleSearch}
                   onSort={toggleSortOrder}
