@@ -1,6 +1,5 @@
 import TodoList from "./components/TodoList";
 import AddTodoForm from "./components/AddTodoForm";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useEffect, useState, useMemo } from "react";
 import Button from "./components/Button";
 import SearchList from "./components/SerachList";
@@ -189,49 +188,37 @@ export default function App() {
   return (
     <div className="app">
       <img src="/to-do-list.png" alt="Main picture" className="app-image" />
-
-      <BrowserRouter>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <>
-                <HeadingH1>Todo List</HeadingH1>
-
-                <AddTodoForm
-                  onAddTodo={handleAddTodo}
-                  onSearch={handleSearch}
-                  onSort={toggleSortOrder}
-                />
-                {isLoading ? (
-                  <p>Loading...</p>
-                ) : searchTerm ? (
-                  filteredTodos.length > 0 ? (
-                    <>
-                      <SearchList filteredTodos={filteredTodos} />
-                      <Button onClick={handleReturn}>Return</Button>
-                    </>
-                  ) : (
-                    <>
-                      <p>No results found</p>
-                      <Button onClick={handleReturn}>Return</Button>
-                    </>
-                  )
-                ) : (
-                  <TodoList todoList={currentTodos} onRemoveTodo={removeTodo} />
-                )}
-                <Pagination
-                  todoPerPage={todoPerPage}
-                  totalTodos={todoList.length}
-                  setCurrentPage={setcurrentPage}
-                  currentPage={currentPage}
-                />
-              </>
-            }
-          />
-          <Route path="/new" element={<HeadingH1>New Todo List</HeadingH1>} />
-        </Routes>
-      </BrowserRouter>
+      <>
+        <HeadingH1>Todo List</HeadingH1>
+        <AddTodoForm
+          onAddTodo={handleAddTodo}
+          onSearch={handleSearch}
+          onSort={toggleSortOrder}
+        />
+        {isLoading ? (
+          <p>Loading...</p>
+        ) : searchTerm ? (
+          filteredTodos.length > 0 ? (
+            <>
+              <SearchList filteredTodos={filteredTodos} />
+              <Button onClick={handleReturn}>Return</Button>
+            </>
+          ) : (
+            <>
+              <p>No results found</p>
+              <Button onClick={handleReturn}>Return</Button>
+            </>
+          )
+        ) : (
+          <TodoList todoList={currentTodos} onRemoveTodo={removeTodo} />
+        )}
+        <Pagination
+          todoPerPage={todoPerPage}
+          totalTodos={todoList.length}
+          setCurrentPage={setcurrentPage}
+          currentPage={currentPage}
+        />
+      </>
     </div>
   );
 }
