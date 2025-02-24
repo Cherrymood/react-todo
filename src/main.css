@@ -282,3 +282,23 @@ p {
     font-size: 1.4rem;
   }
 }
+
+@media (max-width: 400px) {
+  h1 {
+    font-size: 2rem;
+  }
+
+  .app-image {
+    width: 90%;
+  }
+
+  .add-todo-list,
+  .search-result,
+  .todo-list {
+    width: 90%;
+  }
+
+  .button-33 {
+    font-size: 14px;
+  }
+}
