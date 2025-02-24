@@ -33,7 +33,7 @@ export default function AddTodoForm({
 
       setisAddtitle(false);
     } else if (isAddtitle) {
-      alert("Please enter a valid todo title.");
+      // alert("Please enter a valid todo title.");
       setisAddtitle(false);
     }
   }
