@@ -1,6 +1,6 @@
 # Todo Application
 
-react-todo-three-teal.vercel.app you can try it
+[react-todo-three-teal.vercel.app](https://react-todo-three-teal.vercel.app)
 
 ## Overview
 
@@ -9,8 +9,11 @@ The Todo Application is a simple and user-friendly web app that allows users to 
 ## Features
 
 - Add new tasks to your todo list
-- Mark tasks as completed
 - Delete tasks from your list
+- Sorting tasks
+- Search tasks
+- Pagination
+- SQL db
 - Responsive design for mobile and desktop use
 
 ## Technologies Used
@@ -31,7 +34,7 @@ The Todo Application is a simple and user-friendly web app that allows users to 
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/todo-app.git
+   git clone https://github.com/Cherrymood/todo-app.git
    ```
    Navigate to the project directory:
    cd todo-app
