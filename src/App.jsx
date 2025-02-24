@@ -129,15 +129,6 @@ export default function App() {
         }
       );
 
-      if (!response.ok) {
-        const message = `Error has ocurred:
-                               ${response.status}`;
-        throw new Error(message);
-      }
-
-      const result = await response.json();
-      console.log("result", result);
-
       return { id: result.id, title: result.fields.Title };
     } catch (error) {
       console.error("Error posting data:", error);
@@ -206,6 +197,7 @@ export default function App() {
                 <HeadingH1>Todo List</HeadingH1>
 
                 <AddTodoForm
+
                   onAddTodo={handleAddTodo}
                   onSearch={handleSearch}
                   onSort={toggleSortOrder}

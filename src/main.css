@@ -1,3 +1,5 @@
+
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
 /* General reset and layout styles */
 * {
   margin: 0;
@@ -11,8 +13,6 @@ body {
   font-family: "Roboto", Arial, sans-serif; /* Default font family */
   padding: 20px;
 }
-
-/* App container */
 .app {
   display: flex;
   flex-direction: column;

@@ -16,6 +16,7 @@ export default function AddTodoForm({
   function handleTitleChange(e) {
     setTodoTitle(e.target.value);
     setisAddtitle(true);
+
   }
 
   function handleAddTodo(e) {
@@ -46,7 +47,6 @@ export default function AddTodoForm({
 
   function handleSearch(e) {
     e.preventDefault();
-    // console.log("todoTitle", todoTitle);
     onSearch(todoTitle);
     setIsSearch(false);
     setTodoTitle("");
