@@ -1,4 +1,5 @@
-/* Set background color and default text color */
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+
 body {
   background-color: #f4f4f9; /* Light gray background */
   color: #333; /* Default text color */
@@ -6,9 +7,6 @@ body {
   margin: 50;
   padding: 10;
 }
-
-/* Load Google Fonts */
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
 
 .app {
   display: flex;
